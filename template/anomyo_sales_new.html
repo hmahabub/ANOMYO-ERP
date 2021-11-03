@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Be Anomyo, Be Productive</title>
+  <link rel = "icon" type = "image/png" href ="{% static 'image/icon.png' %}">
+  <meta name="viewport" content="width=device-width, intial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap.min.css" %}'>  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">ANOMYO</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="container collapse navbar-collapse" id="navbarNavDarkDropdown">
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_hr as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Employee
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" href="/dsp/emp">Personal Details</a></li>
+            <li><a class="dropdown-item" href="/dsp/pr_rgl">Payroll (Regular Employee)</a></li>
+            <li><a class="dropdown-item" href="/dsp/pr_csl">Payroll (Casual Employee)</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_marchent as permision %}
+      {% if permision%}
+        <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Client
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink2">
+            <li><a class="dropdown-item" href="/dsp/client">Client Details</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_accountant request.user.user_info.is_marchent as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Sales and Invoice
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink3">
+            {% firstof request.user.user_info.is_admin request.user.user_info.is_marchent as subpermision %}
+            {% if subpermision%}
+            <li><a class="dropdown-item" href="/dsp/sales">Invoicing</a></li>
+            {% endif %}
+            <li><a class="dropdown-item" href="/dsp/invoices">All Invoices</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_accountant as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Book keeping 
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink3">
+            <li><a class="dropdown-item" href="/dsp/trns">Register Transaction</a></li>
+            <li><a class="dropdown-item" href="/dsp/cash_book">Cash Book</a></li>
+            <li><a class="dropdown-item" href="/dsp/bank_book">Bank Book</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+  <!--Breadcumb-->
+  <div>
+  	<nav aria-label="breadcrumb">
+  	  <ol class="breadcrumb">
+  	    <li class="breadcrumb-item"><a href="/">Home</a></li>
+        {% if f%}
+  	    <li class="breadcrumb-item active"><a href="/dsp/invoices">Invoices</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{f.invoice_no}}</li>
+        {% else %}
+        <li class="breadcrumb-item active" aria-current="page">Sales Entry</li>
+        {% endif %}
+  	  </ol>
+  	</nav>
+  </div>
+
+
+  <form class="form" method="post">
+    <nav id="navbar_top" class="navbar navbar-light bg-light">
+      <button type="submit" class="btn btn-primary ms-auto me-2" id="saveButton">Save</button>
+    </nav>
+<div class="container">
+  <div class=" row g-3">
+    <div class="col-md-3">
+      <label for="inv_no" class="form-label" >Possible Invoice No.</label>
+      <input type="text" class="form-control" id="inv_no" value="{{new_invoice_no}}{{f.invoice_no}}" disabled>
+    </div>
+    <div class="col-md-3">
+      <label for="inv_date" class="form-label">Invoice Date</label>
+      <input type="date" class="form-control"  id="inv_date" value="{{today}}">
+    </div>
+
+    <div class="col-md-3">
+      <label for="report_no" class="form-label" >Report No.</label>
+      <input type="text" class="form-control" id="report_no" value="{{report_no}}">
+    </div>
+    
+    <div class="col-md-3">
+      <label for="report_date" class="form-label">Report Date</label>
+      <input type="date" class="form-control" id="report_date" value="{{today}}">
+    </div>
+    <div class="col-md-10">
+      <label for="client" class="form-label">Client</label>
+      <select id="client" class="form-select" required>
+        <option value="">Choose...</option>
+        {%for c in clients%}
+        <option value="{{c.id}}">{{c.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <label for="currency" class="form-label">Currency</label>
+      <select id="currency" class="form-select" required>
+       <option value="">Choose...</option>
+        {%for c in currencies %}
+        <option value="{{c.id}}">{{c.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-6 col-4">
+      <label for="inputAddress" class="form-label">Description</label>
+    </div>
+    <div class="col-md-4 col-4">
+      <label for="inputAddress2" class="form-label">Quantity</label>
+
+    </div>
+    <div class="col-md-2 col-4">
+      <label for="inputCity" class="form-label">Amount</label>
+
+    </div>
+    <div  id="appendHere">
+      <div id="appendThis1" class="row col-12" data-id="1">
+        <div class="col-md-6 col-4">
+          <input type="text" class="form-control" id="desc1" value="{{c.name}}">
+        </div>
+
+        <div class="col-md-4 col-4">
+          <input type="text" class="form-control" id="qtn1" value="">
+        </div>
+
+        <div class="col-md-2 col-4">
+          <input type="number" class="form-control amount" id="amount1" value="0" onchange="get_total()" required>
+        </div>
+      </div>
+      
+    </div>
+    <div class="col-12 ms-5">
+      <button id="addLine" class="btn-sm btn-info" type="button">+</button>
+      <button id="subLine" class="btn-sm btn-info invisible" type="button">-</button>
+    </div>
+    <div  >
+      <div class="row col-12" data-id="1">
+        <div class="col-6">
+          
+        </div>
+
+        <div class="col-4">
+          
+        </div>
+
+        <div class="col-md-2 text-end">
+          <div>
+            <p>Total: <p id="total">0</p></p>
+            <p>Discount: <input type="number" id="discount" onchange="get_net_total()" value="0" required></p>
+            
+            <p>Net Total: <p id="net_total">0</p></p>
+            <p>Recieved : {{f.recieved}}</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+</div>
+</form>
+<footer>
+  <div style="height: 100px;"></div>
+</footer>
+</body>
+	<script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+		<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function(){
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 20) {
+        document.getElementById('navbar_top').classList.add('fixed-top');
+        // add padding top to show content behind navbar
+        navbar_height = document.querySelector('.navbar').offsetHeight;
+        document.body.style.paddingTop = navbar_height + 'px';
+      } else {
+        document.getElementById('navbar_top').classList.remove('fixed-top');
+         // remove padding top from body
+        document.body.style.paddingTop = '0';
+      } 
+  });
+}); 
+   
+    
+    $("#addLine").click(()=>{
+      var div = $("#appendThis1").clone()
+      let data_id = parseInt($("#appendThis1").attr('data-id')) + 1
+      $("#appendThis1").attr('data-id',data_id.toString())
+      let new_id = "appendThis" + data_id.toString()
+      let desc_id = "desc" + data_id.toString()
+      let qtn_id = "qtn" + data_id.toString()
+      let amount_id = "amount" + data_id.toString()
+      div.attr('id',new_id)
+      div.find("#desc1").attr('id',desc_id)
+      
+      div.find("#qtn1").attr('id',qtn_id)
+      
+      div.find("#amount1").attr('id',amount_id)
+      
+      div.appendTo("#appendHere")
+      $("#"+desc_id).val("")
+      $("#"+qtn_id).val("")
+      $("#"+amount_id).val("0")
+
+      $("#subLine").attr('class','btn-sm btn-info visible')
+    })
+    $("#subLine").click(()=>{
+      let div_no = parseInt($("#appendThis1").attr('data-id'))
+      let data_id = div_no - 1
+      if (data_id == 1){
+        $("#subLine").attr('class','btn-sm btn-info invisible')
+      }
+      $("#appendThis1").attr('data-id',data_id.toString())
+      let new_id = "#appendThis" + div_no.toString()
+      $(new_id).remove()
+    })
+
+function get_total(){
+      let count = parseInt($("#appendThis1").attr('data-id')) + 1
+      let total = 0
+        for(i=1;i<count;i++){
+          let amount_id = "#amount" + i.toString()
+          if ($(amount_id).val() != ""){
+          total += parseInt($(amount_id).val())
+        }
+      }
+      let net_total = total - parseInt($("#discount").val())
+        $("#total").html(total)
+        $("#net_total").html(net_total)
+      }
+function get_net_total(){
+      let total = $("#total").html()
+      if($("#discount").val() != ""){
+      let net_total = parseInt(total) - parseInt($("#discount").val())
+        $("#net_total").html(net_total)
+      }
+    }
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does $(this) cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}  
+
+    $(".form").on("submit", function(event){
+        event.preventDefault();
+        let count = parseInt($("#appendThis1").attr('data-id'))
+        criterias = []
+        for(i=1;i<=count;i++){
+          let id_name = "#appendThis" + i.toString()
+          let desc_id = "#desc" + i.toString()
+          let qtn_id = "#qtn" + i.toString()
+          let amount_id = "#amount" + i.toString()
+          let ctr = {
+            'desc' : $(desc_id).val(),
+            'qtn' : $(qtn_id).val(),
+            'amount' : $(amount_id).val()
+          }
+          criterias.push(ctr)
+        }
+
+    var formValues= {
+      'invoice_no' : $('#inv_no').val(),
+      'invoice_date' : $('#inv_date').val(),
+      'report_no' : $('#report_no').val(),
+      'report_date' : $('#report_date').val(),
+      'client_id' : $('#client').val(),
+      'currency_id' : $('#currency').val(),
+      'discount' : $('#discount').val(),
+      'criteria_no' : count,
+      'criterias' : criterias
+    }
+
+     $.ajax(
+    {
+        type:"POST",
+        url: "/save/sales/",
+        
+        data: formValues,
+        dataType:"json",
+        // contentType: "application/json; charset=uft-8",
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function( data ) 
+        {
+          window.location= "/view/sales/" + data.id
+          $("#inv_no").val(data.invoice_no)
+          $("#saveButton").hide()
+          $("#updateLink").attr('class','visible')
+          $("#updateLink").attr('href', "/view/sales/" + data.id)
+          $("#downLink").attr('class','visible')
+          $("#downLink").attr('href', "/gen_pdf/invoice/" + data.id)
+          $("#downloadButton").attr('class','btn btn-primary visible')
+          $("#messageBox").html(data.message)
+          $("input").attr('disabled','disabled');
+          $("select").attr('disabled','disabled');
+        }
+      })
+    })
+   
+    
+	</script>
+</html>

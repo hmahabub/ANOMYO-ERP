@@ -1,0 +1,114 @@
+<div style="display: inline;">
+    <img src="../../static/image/anomyo.png" style="width: 110px;
+    height: 110px; ">
+</div>
+<div style="margin:auto; text-align: center;">
+    Rieder & Silva ECOM KLG<br>
+    {{ shop_name }}<br>
+    {{ shop.address }}<br>
+    {{ shop.zip | upcase }}  {{ shop.city }}<br><br>
+</div>
+<br><br>
+<table>
+    <tr>
+        <td>
+            <strong>Bill to</strong><br>
+            {{billing_address.name}}<br>
+            {{billing_address.street}}<br>
+            {{billing_address.zip}} {{billing_address.city}}
+        </td>
+        <td>
+            <strong>Ship to</strong><br>
+            {{shipping_address.name}}<br>
+            {{shipping_address.street}}<br>
+            {{shipping_address.zip}} {{shipping_address.city}}
+        </td>
+        <td>
+            <strong>Invoice No. {{order_name}}</strong><br>
+            Order Date {{created_at}}<br>
+            Payment {{gateaway}}<br>
+            Shipping {{ shipping_method.title }} 2-4 workdays
+
+        </td>
+    </tr>
+</table>
+
+<table class="desc">
+    <tr>
+        <th>Item Description</th>
+        <th>Qty</th>
+        <th>Tax</th>
+        <th>Price</th>
+        <th>Total</th>
+    </tr>
+    {% for line_item in line_items %}
+    <tr class="desc_td">
+        <td><strong>{{ line_item.title | link_to: line_item.url }}</strong><br>{{line_item.product_id}}</td>
+        <td>× {{line_item.quantity}}</td>
+        <td>{% for tax_line in tax_lines %}{{ tax_line.rate | times: 100 }}%{% endfor %}</td>
+        <td>{{line_item.price | money}}</td>
+        <td>{{line_item.line_price | money}}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Shipping</td>
+        <td>{{ shipping_method.price | money }}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Total excl. Tax</td>
+        <td>{{total_price | minus: tax_price | money}}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{% for tax_line in order.tax_lines %}{{ tax_line.title }} ({{ tax_line.rate | times: 100 }}%) {% endfor %}</td>
+        <td>{{tax_price | money}}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <th>Total </td>
+        <th>{{total_price | money}}</td>
+    </tr>
+</table>
+
+
+<style type="text/css">
+*{
+    font-size: 14px;
+}
+    table{
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .desc tr:nth-child(odd){
+        background-color: lightgray;
+    }
+    .desc tr:nth-child(1){
+        background-color: black;
+        color:  white;
+    }
+    .desc td,th{
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .desc th {
+        background-color: black;
+        color:  white;
+    }
+    .desc tr td:nth-child(1){
+        width:  30%;
+    }
+</style>
+
+<script type="text/javascript">
+    window.print()
+</script>

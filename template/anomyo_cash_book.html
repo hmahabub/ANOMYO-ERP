@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Be Anomyo, Be Productive</title>
+  <link rel = "icon" type = "image/png" href ="{% static 'image/icon.png' %}">
+  <meta name="viewport" content="width=device-width, intial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap.min.css" %}'>  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">ANOMYO</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="container collapse navbar-collapse" id="navbarNavDarkDropdown">
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_hr as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Employee
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" href="/dsp/emp">Personal Details</a></li>
+            <li><a class="dropdown-item" href="/dsp/pr_rgl">Payroll (Regular Employee)</a></li>
+            <li><a class="dropdown-item" href="/dsp/pr_csl">Payroll (Casual Employee)</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_marchent as permision %}
+      {% if permision%}
+        <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Client
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink2">
+            <li><a class="dropdown-item" href="/dsp/client">Client Details</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_accountant request.user.user_info.is_marchent as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Sales and Invoice
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink3">
+            {% firstof request.user.user_info.is_admin request.user.user_info.is_marchent as subpermision %}
+            {% if subpermision%}
+            <li><a class="dropdown-item" href="/dsp/sales">Invoicing</a></li>
+            {% endif %}
+            <li><a class="dropdown-item" href="/dsp/invoices">All Invoices</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_accountant as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Book keeping 
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink3">
+            <li><a class="dropdown-item" href="/dsp/trns">Register Transaction</a></li>
+            <li><a class="dropdown-item" href="/dsp/cash_book">Cash Book</a></li>
+            <li><a class="dropdown-item" href="/dsp/bank_book">Bank Book</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+<!--Breadcumb-->
+<div>
+		<nav aria-label="breadcrumb">
+		  <ol class="breadcrumb">
+		    <li class="breadcrumb-item"><a href="/">Home</a></li>
+		    <li class="breadcrumb-item active" aria-current="page">Cash Book</li>
+		  </ol>
+		</nav>
+</div>
+
+
+
+<div class="accordion container" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+        Transaction via Cash
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion container" id="accordionExample2">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="heading12">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse12" aria-expanded="false" aria-controls="collapse12">
+                Validate Recorded Payment
+              </button>
+            </h2>
+            <div id="collapse12" class="accordion-collapse collapse" aria-labelledby="heading12" data-bs-parent="#accordionExample2">
+              <div class="accordion-body row">
+                <div class="col-4">
+                  <button class="btn btn-primary me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#Modal">Validate Payroll (Full Time)</button>
+                <!-- Modal -->
+                <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabel">Full Time Employee</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <form method="post" action="/save/cash_entry_pr_reg/">
+                        {% csrf_token %}
+                      <div class="modal-body row">
+
+                        <div class="col-6">
+                          <table class="table table-hover">
+                            <tr>
+                              <td><input type="checkbox" id="select_all_reg_cash" name=""></td>
+                              <td>Select All</td>
+                            </tr>
+                          {% for a in pr_reg %}
+                            <tr>
+                              <td><input type="checkbox" class="pr_reg_cash" name="id_list" value="{{a.id}}"></td>
+                              <td>{{a.employee.name}}</td>
+                              <td class="net_pay_reg_cash">{{a.net_payable}}</td>
+                              <td><input type="month" value="{{a.month.month}}" disabled></td>
+                            </tr>
+                          {%endfor%}
+                          </table>
+                        </div>
+                        <div class="col-6">
+                          
+                            <div class="row">
+                              
+                              <div class="col-12">
+                                <label>Type</label>
+                              <select name="method" class="form-select" required>
+                                <option value="D" selected>Debit</option>
+                              </select>
+                            </div>
+                            <div class="col-4">
+                            <label>Day</label>
+                            <input type="number" name="day" value="{{day}}" min="1" max="31" class="form-control">
+                          </div>
+                            <div class="col-8">
+                              <label>Date</label>
+                              <input type="month" value="{{month.month}}" class="form-control" disabled>
+                              <input type="hidden" name="month_id" value="{{month.id}}" class="form-control">
+                            </div>
+                            
+                          <div class="col-12">
+                            <label>Particulars</label>
+                            <input type="text" name="prtc" value="Expenses from payroll of full time employee on {{month.month}}" maxlength="300" class="form-control">
+                          </div>
+                          
+                          <div class="col-6">
+                            <label>Amount: <p  id="pr_reg_cash_amount1">0</p></label>
+                            <input type="hidden" id="pr_reg_cash_amount2" value="0" name="amount" step="0.01" class="form-control">
+                          </div>
+                          <div class="col-6">
+                            <br>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                          </div>
+                          </div>
+                        
+                          </div>
+
+                        </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <button class="btn btn-primary me-md-2" type="button" data-bs-toggle="modal" data-bs-target="#Modal1">Validate Payroll (Part Time)</button>
+                <!-- Modal -->
+                <div class="modal fade" id="Modal1" tabindex="-1" aria-labelledby="Modal1Label" aria-hidden="true">
+                  <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="Modal1Label">Part Time Employee</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <form method="post" action="/save/cash_entry_pr_csl/">
+                        {% csrf_token %}
+                      <div class="modal-body row">
+                        <div class="col-6">
+                          <table class="table table-hover">
+                            <tr>
+                              <td><input type="checkbox" id="select_all_csl_cash" name=""></td>
+                              <td>Select All</td>
+                            </tr>
+                          {% for a in pr_csl %}
+                            <tr>
+                              <td><input type="checkbox" class="pr_csl_cash" name="id_list" value="{{a.id}}"></td>
+                              <td>{{a.employee.name}}</td>
+                              <td class="net_pay_csl_cash">{{a.net_payable}}</td>
+                              <td><input type="month" value="{{a.month.month}}" disabled></td>
+                            </tr>
+                          {%endfor%}
+                          </table>
+                        </div>
+                        <div class="col-6">
+                          
+                            <div class="row">
+                              
+                              <div class="col-12">
+                                <label>Type</label>
+                              <select name="method" class="form-select" required>
+                                <option value="D" selected>Debit</option>
+                              </select>
+                            </div>
+                            <div class="col-4">
+                            <label>Day</label>
+                            <input type="number" name="day" value="{{day}}" min="1" max="31" class="form-control">
+                          </div>
+                            <div class="col-8">
+                              <label>Date</label>
+                              <input type="month" value="{{month.month}}" class="form-control" disabled>
+                              <input type="hidden" name="month_id" value="{{month.id}}" class="form-control">
+                            </div>
+                            
+                          <div class="col-12">
+                            <label>Particulars</label>
+                            <input type="text" name="prtc" value="Expenses from payroll of part time employee on {{month.month}}" maxlength="300" class="form-control">
+                          </div>
+                          
+                          <div class="col-6">
+                            <label>Amount: <p  id="pr_csl_cash_amount1">0</p></label>
+                            <input type="hidden" id="pr_csl_cash_amount2" value="0" name="amount" step="0.01" class="form-control">
+                          </div>
+                          <div class="col-6">
+                            <br>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                          </div>
+                          </div>
+                        
+                          </div>
+
+                        </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-4">
+                  <a href="/dsp/invoices" class="btn btn-primary">Register Invoice Payment</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading11">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse11" aria-expanded="false" aria-controls="collapse11">
+              Advance Payment to Employee
+            </button>
+          </h2>
+          <div id="collapse11" class="accordion-collapse collapse" aria-labelledby="heading11" data-bs-parent="#accordionExample2">
+            <div class="accordion-body row">
+              <div class="col-3">
+                <a href="/dsp/advance?page=cash" class="btn btn-primary">Advance to Employee</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="heading13">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse13" aria-expanded="false" aria-controls="collapse13">
+              Others
+            </button>
+          </h2>
+          <div id="collapse13" class="accordion-collapse collapse" aria-labelledby="heading13" data-bs-parent="#accordionExample2">
+            <form method="post" action="/save/cash_entry/">
+              {% csrf_token %}
+            <div class="accordion-body row">
+              
+               <div class="col-2">
+                <label>Type</label>
+                <select name="method" value="" class="form-select" id="method" required>
+                  <option value="">Type</option>
+                  <option value="C">Credit</option>
+                  <option value="D">Debit</option>
+                </select>
+              </div>
+              <div class="col-1">
+                <label>Day</label>
+                <input type="number" name="day" value="{{day}}" class="form-control" max="31" min="1" required>
+              </div>
+              <div class="col-2">
+                <label>Month</label>
+                <input type="month" value="{{month.month}}" class="form-control" disabled>
+                <input type="hidden" name="month_id" value="{{month.id}}" class="form-control">
+              </div>
+              <div class="col-3">
+                <label>Select</label>
+                <select class="form-select" id="prtc">
+                <option value selected>-------</option>
+                <option value="Opening Balance" class="credit invisible">Opening Balance</option>
+                <option value="" class="credit invisible">Other</option>
+                <option value="House Rent" class="debit invisible">House Rent</option>
+                <option value="Store Rent" class="debit invisible">Store Rent</option>
+                <option value="Office Rent" class="debit invisible">Office Rent</option>
+                <option value="Utility Bill" class="debit invisible">Utility Bill</option>
+                <option value="Telecom Bill" class="debit invisible">Telecom Bill</option>
+                <option value="Internet Bill" class="debit invisible">Internet Bill</option>
+                <option value="Repair and Mantanance Bill" class="debit invisible">Repair and Mantanance Bill</option>
+                <option value="Software Bill" class="debit invisible">Software Bill</option>
+                <option value="Health & Safety Purchase" class="debit invisible">Health & Safety Purchase</option>
+                <option value="Lab Testing Charge" class="debit invisible">Lab Testing Charge</option>
+                <option value="Survey Equipments Purchase" class="debit invisible">Survey Equipments Purchase</option>
+                <option value="Cable TV  Line Rent" class="debit invisible">Cable TV  Line Rent</option>
+                <option value="IT-Purchase" class="debit invisible">IT-Purchase</option>
+                <option value="Printing-Purchase" class="debit invisible">Printing-Purchase</option>
+                <option value="Courier bill" class="debit invisible">Courier bill</option>
+                <option value="Conveyance Bill" class="debit invisible">Conveyance Bill</option>
+                <option value="Office cleaning charge" class="debit invisible">Office cleaning charge</option>
+                <option value="Berthing paper bill" class="debit invisible">Berthing paper bill</option>
+                <option value="Dailly News Paper bill" class="debit invisible">Dailly News Paper bill</option>
+                <option value="Drinking Water bill" class="debit invisible">Drinking Water bill</option>
+                <option value="Refreshment-Purchase" class="debit invisible">Refreshment-Purchase</option>
+                <option value="" class="debit invisible">OTHER</option>
+              </select>
+            </div>
+            <div class="col-4">
+              <label>Particulars</label>
+              <input type="text" id="prtc-main" maxlength="300" name ="prtc" class="form-control">
+            </div>
+
+            <div class="col-2">
+              <label>Amount</label>
+              <input type="number" step="0.01" name="amount" class="form-control" value="0" required>
+            </div>
+            <div class="col-2">
+              <br>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="container-fluid">
+    <nav class="navbar navbar-light bg-light">
+      <div class="container-fluid">
+        <form class="d-flex" method="post" action="/dsp/cash_book">
+          {% csrf_token%}
+          <input class="form-control me-2" type="month" name="month_year" value="{{month_year}}" min="2010" max="2100">
+          <button type="submit" class="btn btn-outline-success">GO</button>
+        </form>
+        
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Download <i class="fas fa-download"></i>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="/gen_pdf/cash_book/{{month_year}}">pdf file  <i class="fas fa-download"></i></a></li>
+            <li><a class="dropdown-item" href="/gen_csv/cash_book/{{month_year}}">csv file  <i class="fas fa-download"></i></a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+  <div class="table-responsive">
+    <table id="myTable" class="table table-success table-hover table-sm font-monospace">
+      
+		<tr>
+			<th>Ref No.</th>
+			<th>Date</th>
+			<th>Particulars</th>
+			<th>Credit</th>
+			<th>Debit</th>
+			<th>Balance</th>
+		</tr>
+    {% for d in dataset %}
+		<tr>
+			
+			<td>{{d.data.id}}</td>
+			<td>{{d.data.date}}</td>
+			<td>{{d.data.prtc}}</td>
+			<td>{%if d.data.method == "C" %}{{d.data.amount}}{% endif %}</td>
+			<td>{%if d.data.method == "D" %}{{d.data.amount}}{% endif %}</td>
+			<td>{{d.balance}}</td>
+			
+		</tr>
+    {% endfor %}
+	</table>
+</div>
+</div>
+	
+
+</body>
+	<script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript">
+	$("#method").change(function(){
+    if ($(this).val() == ""){
+      $(".debit").attr("class","debit invisible")
+      $(".credit").attr("class","credit invisible")
+    }
+
+    else if ($(this).val() == "C"){
+      $(".debit").attr("class","debit invisible")
+      $(".credit").attr("class","credit visible")
+    }
+    else if ($(this).val() == "D"){
+      $(".debit").attr("class","debit visible")
+      $(".credit").attr("class","credit invisible")
+    }
+  })
+
+  $("#prtc").change(function(){
+    $("#prtc-main").val($(this).val())
+  })
+  let total = 0
+
+
+$("#select_all_reg_cash").click(function(){
+     $('.pr_reg_cash:checkbox').prop('checked', this.checked);
+
+     let inp = document.getElementsByClassName("pr_reg_cash")
+     total = 0  
+     for (i=0;i<inp.length;i++){
+      if(inp[i].checked == true){
+      let elm = inp[i].parentElement.parentElement
+      total += parseInt(elm.getElementsByClassName('net_pay_reg_cash')[0].textContent)
+      }
+     }
+     $("#pr_reg_cash_amount1").text(total)
+     $("#pr_reg_cash_amount2").val(total)
+
+    });
+$(".pr_reg_cash").click(function() {
+  if(! $(this).is('checked')){
+    $("#select_all_reg_cash").prop('checked',false)
+  }
+  let inp = document.getElementsByClassName("pr_reg_cash")
+  total = 0  
+  for (i=0;i<inp.length;i++){
+    if(inp[i].checked == true){
+      let elm = inp[i].parentElement.parentElement
+      total += parseInt(elm.getElementsByClassName('net_pay_reg_cash')[0].textContent)
+      }
+     }
+    $("#pr_reg_cash_amount1").text(total)
+    $("#pr_reg_cash_amount2").val(total)
+})
+
+$("#select_all_csl_cash").click(function(){
+     $('.pr_csl_cash:checkbox').prop('checked', this.checked);
+
+     let inp = document.getElementsByClassName("pr_csl_cash")
+     total = 0  
+     for (i=0;i<inp.length;i++){
+      if(inp[i].checked == true){
+      let elm = inp[i].parentElement.parentElement
+      total += parseInt(elm.getElementsByClassName('net_pay_csl_cash')[0].textContent)
+      }
+     }
+     $("#pr_csl_cash_amount1").text(total)
+     $("#pr_csl_cash_amount2").val(total)
+
+    });
+$(".pr_csl_cash").click(function() {
+  if(! $(this).is('checked')){
+    $("#select_all_csl_cash").prop('checked',false)
+  }
+  let inp = document.getElementsByClassName("pr_csl_cash")
+  total = 0  
+  for (i=0;i<inp.length;i++){
+    if(inp[i].checked == true){
+      let elm = inp[i].parentElement.parentElement
+      total += parseInt(elm.getElementsByClassName('net_pay_csl_cash')[0].textContent)
+      }
+     }
+    $("#pr_csl_cash_amount1").text(total)
+    $("#pr_csl_cash_amount2").val(total)
+})
+
+</script>
+</html>

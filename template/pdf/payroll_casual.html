@@ -1,0 +1,118 @@
+
+<html>
+<head>
+	<title>Payroll Casual</title>
+	<style type="text/css">
+	*{
+		font-size: 12px;
+	}
+		img{
+			width: 70px;
+			height: 70px;
+		}
+		.header{
+			
+		}
+		.criteria{
+			border-collapse: collapse;
+		}
+		.criteria th{
+			text-align: center;
+			padding-top: 3px ;
+			/*padding-left: 1px;*/
+		}
+		.criteria tr{
+			border:  1px solid black;
+			padding-top: 3px ;
+			/*padding-left: 1px;*/
+		}
+		.medium_width{
+			width: 9%;
+		}
+		.small_width{
+			width: 5%;
+		}
+		
+		.text_end{
+			text-align: right;
+		}
+		
+		.text_center{
+			text-align: center;
+		}
+		
+
+    @page {
+        size: a4 landscape;
+
+        @frame content_frame {          /* Content Frame */
+            left: 20pt;   right: 20pt; top: 20pt;
+        }
+        
+    }
+</style>
+
+</head>
+<body>
+
+	<table class="header">
+		<tr>
+			<td><img src="{{company.logo.path}}"></td>
+			<td></td>
+			<td></td>
+			<td>
+			{{company.name}}<br>
+			{{company.address}}<br>
+			{{company.email}}<br>
+			{{company.contact_1}}<br>
+		</td>
+		</tr>	
+	</table>
+	<br>
+	<h1 class="text_center">Payroll of Part Time Employee of {{month_year}}</h1>
+	<p class="text_end">* Amount in {{primary_currency}}</p>
+	<table class="criteria text_center">
+		<tr>
+			<th >Name</th>
+			<th>Desig.</th>
+			<th class="small_width">Work Hours</th>
+			<th class="small_width">Hours Rate</th>
+			<th class="medium_width">Overtime</th>
+			<th class="medium_width">Allownce</th>
+			<th class="medium_width">Total Pay.</th>
+			<th class="medium_width">Advance</th>
+			<th class="medium_width">Net Pay.</th>
+			<th>Signature</th>
+			
+		</tr>
+		{% for a in pr_csl_list %}
+		<tr>
+			<td>{{a.employee.name}}</td>
+			<td>{{a.employee.designation}}</td>
+			<td class="small_width">{{a.work_hours}}</td>
+			<td class="small_width">{{a.hours_rate}}</td>
+			<td class="medium_width">{{a.overtime}}</td>
+			<td class="medium_width">{{a.others}}</td>
+			<td class="medium_width">{{a.total_payable}}</td>
+			<td class="medium_width">{{a.advance}}</td>
+			<td class="medium_width">{{a.net_payable}}</td>
+			<td></td>
+		</tr>
+		{% endfor %}
+		<tr>
+			<td>{{pr_csl_list|length}}</td>
+			<td></td>
+			<td class="small_width"></td>
+			<td class="small_width"></td>
+			<td class="medium_width"></td>
+			<td class="medium_width"></td>
+			<td class="medium_width">{{sum_total_payable}}</td>
+			<td class="medium_width"></td>
+			<td class="medium_width">{{sum_net_payable}}</td>
+			<td></td>
+		</tr>
+
+	</table>
+</body>
+
+</html>

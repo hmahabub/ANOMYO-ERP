@@ -1,0 +1,410 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Be Anomyo, Be Productive</title>
+  <link rel = "icon" type = "image/png" href ="{% static 'image/icon.png' %}">
+  <meta name="viewport" content="width=device-width, intial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap.min.css" %}'>  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+</head>
+<body class="bg-light">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+  <div class="container-fluid">
+    <a class="navbar-brand " href="/">ANOMYO</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="container collapse navbar-collapse" id="navbarNavDarkDropdown">
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_hr as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Employee
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" href="/dsp/emp">Personal Details</a></li>
+            <li><a class="dropdown-item" href="/dsp/pr_rgl">Payroll (Regular Employee)</a></li>
+            <li><a class="dropdown-item" href="/dsp/pr_csl">Payroll (Casual Employee)</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_marchent as permision %}
+      {% if permision%}
+        <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Client
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink2">
+            <li><a class="dropdown-item" href="/dsp/client">Client Details</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_accountant request.user.user_info.is_marchent as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Sales and Invoice
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink3">
+            {% firstof request.user.user_info.is_admin request.user.user_info.is_marchent as subpermision %}
+            {% if subpermision%}
+            <li><a class="dropdown-item" href="/dsp/sales">Invoicing</a></li>
+            {% endif %}
+            <li><a class="dropdown-item" href="/dsp/invoices">All Invoices</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_accountant as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Book keeping 
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink3">
+            <li><a class="dropdown-item" href="/dsp/trns">Register Transaction</a></li>
+            <li><a class="dropdown-item" href="/dsp/cash_book">Cash Book</a></li>
+            <li><a class="dropdown-item" href="/dsp/bank_book">Bank Book</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+  <button class="btn btn-dark mx-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="fas fa-outdent"></i></button>
+
+<div class="offcanvas offcanvas-end bg-light" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasRightLabel" class="text-danger"><code><i class="far fa-user "></i> </code>{{request.user}}</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body text-end">
+   
+       <div class="d-grid gap-2">
+        <div class="btn-group-vertical">
+
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_marchent as permision %}
+      {% if permision%}
+      <a href="/dsp/crncy" class="btn btn-secondary me-md-2">Currency</a>
+      {% endif %}
+      <a href="/dsp/users" class="btn btn-secondary  me-md-2">Profile</a>
+     
+      <a class="btn btn-secondary  me-md-2" href="/dsp/templates">Manage Templates</a>
+     </div>
+       <div class="btn-group-vertical">
+      <button class="btn btn-secondary me-md-2 " type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Company Details</button>
+      <!-- Modal for Company Details -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Company Details</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/update/cmpny/1/" method="post" class="g-3 text-start" enctype="multipart/form-data">
+            <div class="row modal-body">
+                {% csrf_token %}
+                {% for field in company_form %}
+                <div class="col-md-4">
+                  <label for="input{{field.label}}" class="form-label">{{field.label}}</label>
+                  {{field}}
+                </div>
+                {% endfor %}
+              </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="Submit" class="btn btn-primary">Save</button>
+              
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      
+      {% if request.user.user_info.is_admin%}
+      <button class="btn btn-secondary me-md-2 border-dark " type="button" data-bs-toggle="modal" data-bs-target="#logModal">Activity Log</button>
+
+      <!-- Modal for  Activity Log -->
+      <div class="modal fade" id="logModal" tabindex="-1" aria-labelledby="logModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="logModalLabel">Activity Log</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark text-center">
+              {% for log in logs.object_list %}
+              <p class="border-bottom border-info text-white">
+                  <code>{{log.username}}</code> {{log.description}} at {{log.datetime}}
+              </p>
+              {% endfor %}
+              
+              
+            </div>
+            <div class="modal-footer">
+             <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center">
+                
+                <li id="log_footer_button" class="page-item"><a class="page-link" href="/view/logs/1">view all activities <i class="fas fa-angle-double-right"></i></a></li>
+                
+              </ul>
+            </nav>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endif%}
+    </div>
+    </div>
+    <br>
+    <a href="/logout" class="btn btn-outline-dark" >Log Out</a>
+  </div>
+</div>
+</nav>
+<div class="container-fluid mt-5">
+
+  <div class="row">
+    
+    <div class="col-lg-6 col-sm-12">
+      <div class="card border-dark mb-3">
+        <div class="card-header text-center">Links</div>
+        <div class="card-body">
+          <div class="row my-2 mx-auto">
+            {% firstof request.user.user_info.is_admin request.user.user_info.is_hr as permision %}
+            {% if permision%}
+            <div class="col-md-1 col-2 mx-3 my-2">
+              <a class="btn btn-secondary px-3 py-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Employees" href="/dsp/emp"><h4><i class="fas fa-user"></i></h4></a>
+            </div>
+            <div class="col-md-1 col-2 mx-3 my-2">
+              <a class="btn btn-secondary px-3 py-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Payroll Regular" href="/dsp/pr_rgl"><h4><i class="fas fa-list-ul"></i></h4></a>
+            </div>
+            <div class="col-md-1 col-2 mx-3 my-2">  
+              <a class="btn btn-secondary px-3 py-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Payrol Casual" href="/dsp/pr_csl"><h4><i class="fas fa-table"></i></h4></a>
+            </div>
+            {%endif%}
+            {% firstof request.user.user_info.is_admin request.user.user_info.is_marchent as permision %}
+            {% if permision%}
+            <div class="col-md-1 col-2 mx-3 my-2">
+              <a class="btn btn-warning px-3 py-1 text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="Client" href="/dsp/client"><h4><i class="fas fa-user-tie"></i></h4></a>
+            </div>
+            <div class="col-md-1 col-2 mx-3 my-2">
+              <a class="btn btn-warning px-3 py-1 text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="Invoicing" href="/dsp/sales"><h4><i class="fas fa-file-invoice"></i></h4></a>
+            </div>
+            <div class="col-md-1 col-2 mx-3 my-2">
+              <a class="btn btn-warning px-3 py-1 text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="All Invoices" href="/dsp/invoices"><h4><i class="fas fa-file-invoice-dollar"></i></h4></a>
+            </div>
+            {%endif%}
+          
+            {% firstof request.user.user_info.is_admin request.user.user_info.is_accountant as permision %}
+            {% if permision%}
+            <div class="col-md-1 col-2 mx-3 my-2">
+              <a class="btn btn-danger px-3 py-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Record Transaction" href="/dsp/trns"><h4><i class="fas fa-cash-register"></i></h4></a>
+            </div>
+            <div class="col-md-1 col-2 mx-3 my-2">
+              <a class="btn btn-danger px-3 py-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Cash Book" href="/dsp/cash_book"><h4><i class="fas fa-money-bill-wave"></i></h4></a>
+            </div>
+            <div class="col-md-1 col-2 mx-3 my-2">
+              <a class="btn btn-danger px-3 py-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Bank Book" href="/dsp/bank_book"><h4><i class="fas fa-landmark"></i></h4></a>
+            </div>
+          {%endif%}
+          
+
+            <div class="col-md-1 col-2 mx-3 my-2">
+              <a class="btn btn-info px-3 py-1 text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="Currency" href="/dsp/crncy"><h4><i class="fas fa-dollar-sign"></i></h4></a>
+            </div>
+            <div class="col-md-1 col-2 mx-3 my-2">
+              <a class="btn btn-info px-3 py-1 text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="Profile" href="/dsp/users"><h4><i class="fas fa-user-circle"></i></h4></a>
+            </div>
+            <div class="col-md-1 col-2 mx-3 my-2">
+              <a class="btn btn-info px-3 py-1 text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="Manage Templates" href="/dsp/templates"><h4><i class="fas fa-file-export"></i></h4></a>
+            </div>
+           
+            
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    <div class="col-lg-6 col-sm-12">
+      <div class="card border-dark mb-3">
+        <div class="card-header text-center">To Do List</div>
+        <div class="card-body text-dark">
+          <br><br><br><br><br>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    {% firstof request.user.user_info.is_admin request.user.user_info.is_accountant as permision %}
+    {% if permision%}
+    <div class="col-lg-4 col-sm-12">
+      <div class="card border-dark mb-3">
+        <div class="card-header text-center">Company INFO</div>
+        <div class="card-body text-dark">
+          <div class="row border border-light">
+            <div class="col-6">
+              Name
+            </div>
+            <div class="col-6">
+              <span >{{company.name}}</span>
+            </div>
+          </div>
+          <div class="row border border-light">
+            <div class="col-6">
+              Total Employee
+            </div>
+            <div class="col-6">
+              <span >{{emp_no}}</span>
+            </div>
+          </div>
+          <div class="row border border-light">
+            <div class="col-6">
+              Total User
+            </div>
+            <div class="col-6">
+              <span >{{mod_no}}</span>
+            </div>
+          </div>
+          <div class="row border border-light">
+            <div class="col-6">
+              Primary Currency
+            </div>
+            <div class="col-6">
+              <span >{{currency | safe}}</span>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-sm-12">
+      <div class="card border-dark mb-3">
+        <div class="card-header text-center"><input class="form-control" type="number" min="2011" max="2100" id="year" value="{{year}}"></div>
+        <div class="card-body text-dark">
+          <div class="row border border-light">
+            <div class="col-7">
+              <h4>Expense</h4>
+            </div>
+            <div class="col-5">
+              <span id="expense">{{expense}}</span> {{currency | safe}}
+            </div>
+          </div>
+           <div class="row border border-light">
+            <div class="col-7">
+              <h4>Sales(recieved)</h4>
+            </div>
+            <div class="col-5">
+              <span id="sales">{{sales}}</span> {{currency | safe}}
+            </div>
+          </div>
+           <div class="row border border-light">
+            <div class="col-7">
+              <h4>Revenue</h4>
+            </div>
+            <div class="col-5">
+              <span id="revenue">{{revenue}}</span> {{currency | safe}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-4 col-sm-12">
+      <div class="card border-dark mb-3">
+        <div class="card-header text-center">More</div>
+        <div class="card-body text-dark">
+          <div class="row border border-light">
+            <div class="col-6">
+              Total Invoices
+            </div>
+            <div class="col-6">
+              <span id="invoice_no">{{invoice_no}}</span>
+            </div>
+          </div>
+          <div class="row border border-light">
+            <div class="col-6">
+              Best Client(by amount)
+            </div>
+            <div class="col-6">
+              <span id="best_client">{{best_client}}</span>
+            </div>
+          </div>
+          <div class="row border border-light">
+            <div class="col-6">
+              Best Client's Sales
+            </div>
+            <div class="col-6">
+              <span id="best_client_sales">{{best_client_sales}}</span> {{currency | safe}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    
+     <div class="col-12">
+      <div class="card border-dark mb-3">
+        <div class="card-header text-center">Tutorials</div>
+        <div class="row card-body text-dark">
+          <div class="col-md-4">
+            <iframe src="https://www.youtube.com/embed/FTpZy6YeFGM" height="200" width="100%"></iframe>
+          </div>
+          <div class="col-md-4">
+            <iframe src="https://www.youtube.com/embed/7L_-hTi9aCU" height="200" width="100%"></iframe>
+          </div>
+          <div class="col-md-4">
+            <ul>
+              <li><a href="https://www.youtube.com/watch?v=yfpSNvYmR0s" target="_blank">PAYROLL OF PART TIME EMPLOYEES | CREATE, EDIT, DOWNLOAD</a></li>
+              <li><a href="https://www.youtube.com/watch?v=w_bIp0Yb164" target="_blank">PAYROLL OF FULL TIME EMPLOYEES | CREATE, EDIT, DOWNLOAD</a></li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+  <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script type="text/javascript">
+    $("#year").change(function(){
+
+      if($(this).val()>2006 && $(this).val()<2100){
+
+        $.ajax(
+        {
+        type:"GET",
+        url: "/dsp/summary",
+        data:{
+          'year': $(this).val()
+        },
+        dataType:"json",
+        // headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function( data ) 
+        { 
+          $("#expense").html(data.expense)
+          $("#sales").html(data.sale)
+          $("#revenue").html(data.revenue)
+          $("#invoice_no").html(data.invoice_no)
+          $("#best_client_sales").html(data.best_client_sales)
+          $("#best_client").html(data.best_client)
+         }
+      })  
+      }
+    })
+    
+  </script>
+</body>
+</html>

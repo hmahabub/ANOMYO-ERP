@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<title>{{page}} book</title>
+	<style type="text/css">
+	*{
+		font-size: 12px;
+	}
+		img{
+			width: 70px;
+			height: 70px;
+		}
+		.header{
+
+		}
+		.header .first_box{
+			width: 25%;
+		}
+		.criteria{
+			border-collapse: collapse;
+			
+		}
+		.criteria th{
+			text-align: center;
+			padding-top: 3px ;
+			/*padding-left: 1px;*/
+		}
+		.criteria tr{
+			border:  1px solid black;
+			padding-top: 3px ;
+			/*padding-left: 1px;*/
+		}
+		.medium_width{
+			width: 9%;
+		}
+		.small_width{
+			width: 5%;
+		}
+		
+		.text_end{
+			text-align: right;
+		}
+		
+		.text_center{
+			text-align: center;
+		}
+		
+
+    @page {
+        size: a4 landscape;
+
+        @frame content_frame {          /* Content Frame */
+            left: 20pt;   right: 20pt; top: 20pt;
+        }
+        
+    }
+</style>
+
+</head>
+<body>
+	<div>
+
+		<table class="header">
+			<tr>
+				<td class="first_box"><img src="{{company.logo.path}}"></td>
+				<td><h1 class="text_center">{{company.name}}</h1></td>
+				<td class="text_end first_box">
+				
+				{{company.address}}<br>
+				{{company.email}}<br>
+				{{company.contact_1}}<br>
+				</td>
+			</tr>	
+		</table>
+		<br>
+		<h2 class="text_center">{%if page == "cash" %}Cash Book{%elif page == "bank" %}Bank Book{%endif%} of {{month_year}}</h2>
+		<p class="text_end">* Amount in {{primary_currency}}</p>
+	</div>
+	<table class="criteria text_center">
+		<tr>
+			<th class="small_width">Ref No</th>
+			<th class="medium_width">Date</th>
+			<th>Particulars</th>
+			{%if page == "bank" %}
+			<th class="medium_width">Bank</th>
+			<th class="medium_width">Chq No.</th>
+			<th class="medium_width">Chq Date.</th>
+			{%endif%}
+			<th class="medium_width">Credit</th>
+			<th class="medium_width">Debit</th>
+			<th class="medium_width">Balance</th>	
+		</tr>
+		{% for a in book_list %}
+		<tr>
+			<td class="small_width">{{a.data.id}}</td>
+			<td class="medium_width">{{a.data.date}}</td>
+			<td>{{a.data.prtc}}</td>
+			{%if page == "bank" %}
+			<td class="medium_width">{{a.data.bank}}</td>
+			<td class="medium_width">{{a.data.chq_no}}</td>
+			<td class="medium_width">{{a.data.chq_date}}</td>
+			{%endif%}
+			<td class="medium_width">{%if a.data.method == "C" %}{{a.data.amount}}{%endif%}</td>
+			<td class="medium_width">{%if a.data.method == "D" %}{{a.data.amount}}{%endif%}</td>
+			<td class="medium_width">{{a.balance}}</td>	
+		</tr>
+		{% endfor %}
+	</table>
+</body>
+
+</html>

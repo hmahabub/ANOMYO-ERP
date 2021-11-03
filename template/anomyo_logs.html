@@ -1,0 +1,140 @@
+{% load static %}
+{% load mathfilters %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Be Anomyo, Be Productive</title>
+  <link rel = "icon" type = "image/png" href ="{% static 'image/icon.png' %}">
+  <meta name="viewport" content="width=device-width, intial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap.min.css" %}'>   
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">ANOMYO</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="container collapse navbar-collapse" id="navbarNavDarkDropdown">
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_hr as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Employee
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" href="/dsp/emp">Personal Details</a></li>
+            <li><a class="dropdown-item" href="/dsp/pr_rgl">Payroll (Regular Employee)</a></li>
+            <li><a class="dropdown-item" href="/dsp/pr_csl">Payroll (Casual Employee)</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_marchent as permision %}
+      {% if permision%}
+        <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Client
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink2">
+            <li><a class="dropdown-item" href="/dsp/client">Client Details</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_accountant request.user.user_info.is_marchent as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Sales and Invoice
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink3">
+            {% firstof request.user.user_info.is_admin request.user.user_info.is_marchent as subpermision %}
+            {% if subpermision%}
+            <li><a class="dropdown-item" href="/dsp/sales">Invoicing</a></li>
+            {% endif %}
+            <li><a class="dropdown-item" href="/dsp/invoices">All Invoices</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_accountant as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Book keeping 
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink3">
+            <li><a class="dropdown-item" href="/dsp/trns">Register Transaction</a></li>
+            <li><a class="dropdown-item" href="/dsp/cash_book">Cash Book</a></li>
+            <li><a class="dropdown-item" href="/dsp/bank_book">Bank Book</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+  <div class="container">
+    
+    <table class="table table-hover">
+      <tr>
+      <th>Username</th>
+      <th>Operation</th>
+      <th>Time</th>
+    </tr>
+    {% for log in logs.object_list %}
+    <tr>
+    <td><code>{{log.username}}</code></td>
+    <td>{{log.description}}</td>
+    <td>{{log.datetime}}</td>
+    <tr>
+    </tr>
+    {% endfor %}
+    </table>
+
+   
+    <nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <li class="page-item">
+      <a class="page-link" href="/view/logs/1" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {% with ''|center:first_page_num as range %}
+    {% for _ in range %}
+        
+        <li class="page-item"><a class="page-link" href="/view/logs/{{ current_page_num|sub:first_page_num|add:forloop.counter0 }}">{{ current_page_num|sub:first_page_num|add:forloop.counter0 }}</a></li>
+    {% endfor %}
+    {% endwith %}
+   
+    <li class="page-item  disabled"><a class="page-link disabled" href="/view/logs/{{current_page_num}}">{{current_page_num}}</a></li>
+    {% with ''|center:last_page_num as range %}
+    {% for _ in range %}
+        
+        <li class="page-item"><a class="page-link" href="/view/logs/{{ forloop.counter|add:current_page_num }}">{{ forloop.counter|add:current_page_num }}</a></li>
+    {% endfor %}
+    {% endwith %}
+    <li class="page-item">
+      <a class="page-link" href="/view/logs/{{l_page_num}}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+    
+  </div>
+   
+</body>
+  <script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script type="text/javascript">
+  
+  </script>
+</html>

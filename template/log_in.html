@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+{% load static%}
+<html>
+<head>
+	<meta charset="utf-8">
+  <title>Be Anomyo, Be Productive</title>
+  <link rel = "icon" type = "image/png" href ="{% static 'image/icon.png' %}">
+  <meta name="viewport" content="width=device-width, intial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap.min.css" %}'>  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+</head>
+</head>
+<body class="bg-warning bg-gradient font-monospace">
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="navbar_top" class="navbar navbar-light bg-warning bg-gradient">
+        <div class="col-md-6">
+        
+        <button class="btn btn-light">Be Anomyo, Be Productive</button>
+        </div>
+        <div class="col-md-6 text-end">
+          <a class="btn btn-info" href="mailto:sales@anomyo.com" target="_blank"><i class="fas fa-envelope"></i></a>
+          <a class="btn btn-info" href="tel:+88 01832-829921"><i class="fas fa-phone"></i></a>
+        </div>
+      </nav>
+    </div>
+    <div class="row">
+      <hr>
+      <div class="col-md-6 col-sm-12 mx-auto my-2 py-4">
+        <div class="row col-4 mx-auto">
+          <img src="/static/image/anomyo.png" class="img-fluid" alt="ANOMYO">
+        </div>
+        
+        <div class="row col-md-7 mx-auto">
+          <form action="/" method="post" class="shadow bg-white p-3 bg-body rounded">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="text-center text-danger">{{ message }}</div>
+            {% endfor %}
+           
+            {% endif %}
+            {% csrf_token %}
+            <div class="row mb-3">
+              <label for="inputEmail3" class="col-12 col-form-label">Username</label>
+              <div class="col-12">
+                <input type="text" class="form-control" id="inputEmail3" name="username">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <label for="inputPassword3" class="col-12col-form-label">Password</label>
+              <div class="col-12">
+                <input type="password" class="form-control" id="inputPassword3" name="password">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Log in</button>
+          </form>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12 my-auto py-2">
+        <h5 class="card-title">about<p class="display-4">ANOMYO</p></h5>
+        <p class="card-text text-muted">ANOMYO is a cloud accounting software <br> that simplifies recording transactions, managing payables and receivables,<br> collecting taxes, closing the books and enabling timely, accurate reporting<br> and greater control of financial assets.<br><br>With real-time access to financial data, you can quickly drill into details to resolve issues<br> and generate statements and disclosures to comply with multiple regulatory financial compliance requirements.</p>
+      </div>
+      <br>
+      <div class="row my-2 mx-auto bg-transparent py-5">
+        <p class="display-4 text-start">FEATURES</p>
+        <div class="card bg-transparent border-0 my-4 text-white col-sm-4 col-md-3 mx-auto">
+          <div class="card-body">
+            <div class="col-12 mx-auto">
+              <img src="{% static 'image/easy-access.png' %}" class="img-fluid" alt="ANOMYO">
+            </div>
+            <h5 class="card-title h3 text-white">Easy Access</h5>
+            Easy access from any corner of the world at any time through your smartphone or computer.
+          </div>
+        </div>
+        <div class="card bg-transparent border-0 my-4 text-light col-sm-4 col-md-3 mx-auto">
+          <div class="card-body">
+            <div class="col-12 mx-auto">
+              <img src="{% static 'image/save-memory.png' %}" class="img-fluid" alt="ANOMYO">
+            </div>
+            <h5 class="card-title h3 text-white">Saves Memory</h5>
+            Replace Excel, Word, Spreadsheets complete all those tasks at once.
+          </div>
+        </div>
+        <div class="card bg-transparent border-0 my-4 text-light col-sm-4 col-md-3 mx-auto">
+          <div class="card-body">
+            <div class="col-12 mx-auto">
+              <img src="{% static 'image/time-saving.png' %}" class="img-fluid" alt="ANOMYO">
+            </div>
+            <h5 class="card-title h3 text-white">Time Saving</h5>
+            Automate and simplify manual accounting processes that waste time and resources.
+          </div>
+        </div>
+        <div class="card bg-transparent border-0 my-4 text-light col-sm-4 col-md-3 mx-auto">
+          <div class="card-body">
+            <div class="col-12 mx-auto">
+              <img src="{% static 'image/real-time.png' %}" class="img-fluid" alt="ANOMYO">
+            </div>
+            <h5 class="card-title h3 text-white">Real-Time Information</h5>
+            Real-time financial data lets you easily drill down into the details and generate statements.
+          </div>
+        </div>
+        
+      </div>
+      <div class="row my-2 mx-auto">
+        <p class="display-4 text-end">PACKAGES</p>
+        <div class="card bg-transparent border-0 my-4 text-light col-sm-4 col-md-3 mx-auto">
+          <div class="card-body">
+            <div class="col-12 mx-auto">
+              <img src="{% static 'image/1 year.png' %}" class="img-fluid" alt="ANOMYO">
+            </div>
+            <h5 class="card-title h3 text-white">1 Year</h5>
+            Enjoy 1 year subscription at BDT. 3000
+          </div>
+        </div>
+        <div class="card bg-transparent border-0 my-4 text-light col-sm-4 col-md-3 mx-auto">
+          <div class="card-body">
+            <div class="col-12 mx-auto">
+              <img src="{% static 'image/3 year.png' %}" class="img-fluid" alt="ANOMYO">
+            </div>
+            <h5 class="card-title h3 text-white">3 Year</h5>
+            Enjoy 3 year subscription at BDT. 8000
+          </div>
+        </div>
+        <div class="card bg-transparent border-0 my-4 text-light col-sm-4 col-md-3 mx-auto">
+          <div class="card-body">
+            <div class="col-12 mx-auto">
+              <img src="{% static 'image/5 year.png' %}" class="img-fluid" alt="ANOMYO">
+            </div>
+            <h5 class="card-title h3 text-white">5 Year</h5>
+            Enjoy 5 year subscription at BDT. 10000
+          </div>
+        </div>
+      </div>
+     
+
+        
+        <div class="bg-dark bg-gradient text-warning row">
+           <div class="col-md-4 row container border border-2 border-bottom-0 border-start-0 border-top-0 border-warning">
+            <form action="/save_in_admin/message/" method="post">
+              {% csrf_token %}
+                <div class="col-12">
+                  <label class="form-label">Name</label>
+                  <input type="text" name="name" class="form-control bg-warning" required>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Email</label>
+                  <input type="email" name="email" class="form-control bg-warning" required>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Message</label>
+                  <textarea name="message" class="form-control bg-warning" rows="5"></textarea>
+                </div>
+                <div class="col-12 justify-content-end text-end">
+                  <br>
+                  <button type="submit" class="btn
+                  btn-light">Send</button>
+                  <br>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-8">
+              <br><br>
+              <img src="{% static 'image/qr_code.png' %}" class="rounded mx-auto d-block">
+            </div>
+            <div class="text-end">
+              <a href="https://storyset.com/work" class="text-white">Work illustration by Storyset</a>
+            </div>
+          
+        </div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function(){
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 20) {
+        document.getElementById('navbar_top').classList.add('fixed-top');
+        // add padding top to show content behind navbar
+        navbar_height = document.querySelector('.navbar').offsetHeight;
+        document.body.style.paddingTop = navbar_height + 'px';
+      } else {
+        document.getElementById('navbar_top').classList.remove('fixed-top');
+         // remove padding top from body
+
+        document.body.style.paddingTop = '0';
+      } 
+  });
+}); 
+   
+</script>
+</html>

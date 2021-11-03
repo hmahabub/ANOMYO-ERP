@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Invoice</title>
+	<style type="text/css">
+	*{
+		font-size: 12px;
+	}
+		img{
+			width: 70px;
+			height: 70px;
+		}
+		.criteria{
+			border-collapse: collapse;
+		}
+		.criteria th{
+			background-color: mediumseagreen;
+			color: white;
+			font-size: 14px;
+			text-align: center;
+			padding-top: 5px;
+		}
+		.criteria tr{
+			border:  1px solid black;
+			padding: 1px;
+			
+		}
+		.criteria td{
+
+			font-size: 12px;
+			padding-top: 3px;
+		}
+		.text_end{
+			text-align: right;
+		}
+		.desc{
+			width: 50%;
+		}
+		.qtn{
+			width: 25%;
+			text-align: center;
+		}
+		.amount{
+			width: 25%;
+		}
+
+    @page {
+        size: a4 portrait;
+
+        @frame content_frame {          /* Content Frame */
+            left: 50pt; width: 512pt; top: 30pt; height: 632pt;
+        }
+        @frame footer_frame {           /* Another static Frame */
+            -pdf-frame-content: footer_content;
+            left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+        }
+    }
+</style>
+
+</head>
+<body>
+	<table>
+		<tr>
+			<td><img src="{{company.logo.path}}"></td>
+			<td></td>
+			<td></td>
+			<td>
+			{{company.name}}<br>
+			{{company.address}}<br>
+			{{company.email}}<br>
+			{{company.contact_1}}<br>
+		</td>
+		</tr>	
+	</table>
+<br>
+	<table>
+		<tr>
+			<td>
+				<h3>Bill To:</h3>
+				{{info.client.name}}<br>
+				{{info.client.address}}<br>
+				{{info.client.contact_1}}<br>
+				{{info.client.email}}
+			</td>
+			<td></td>
+			<td>
+				<h2>INVOICE</h2>
+				<p>
+				INVOICE NO 		: {{info.invoice_no}}<br>
+				INVOICE DATE 	: {{info.invoice_date}}<br>
+				REPORT NO 		: {{info.report_no}}<br>
+				REPORT DATE 	: {{info.report_date}}</p>
+
+			</td>
+
+		</tr>
+	</table>
+		<br><br>
+		<table class="criteria">
+			<tr>
+				<th class="desc">Description</th>
+				<th class="qtn">Quantity</th>
+				<th class="amonut text_end">Amount in {{info.currency.code}}</th>
+			</tr>
+			{% for a in sales_criteria %}
+			<tr>
+				<td class="desc">{{a.desc}}</td>
+				<td class="qtn">{{a.qtn}}</td>
+				<td class="amount text_end">{{a.amount}}</td>
+			</tr>
+			{% endfor %}
+
+		</table>
+		<br>	
+		<table>
+			<tr>
+				<td></td>
+				<td></td>
+				<td>Total :</td>
+				<td class="text_end">{{info.total}} {{info.currency.code}}</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td>Discount :</td>
+				<td class="text_end"> {{info.discount}} {{info.currency.code}}</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td>Net Total :</td>
+				<td class="text_end"> {{info.net_total}} {{info.currency.code}}</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td>Recieved :</td>
+				<td class="text_end"> {{info.recieved}} {{info.currency.code}}</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td></td>
+				<td>Due :</td>
+				<td class="text_end"> {{info.due}} {{info.currency.code}}</td>
+			</tr>
+		</table>
+
+				<br>
+				<br>
+
+</body>
+
+</html>

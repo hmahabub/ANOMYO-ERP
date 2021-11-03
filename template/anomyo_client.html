@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Be Anomyo, Be Productive</title>
+  <link rel = "icon" type = "image/png" href ="{% static 'image/icon.png' %}">
+  <meta name="viewport" content="width=device-width, intial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href='{% static "css/bootstrap.min.css" %}'>  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">ANOMYO</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="container collapse navbar-collapse" id="navbarNavDarkDropdown">
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_hr as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Employee
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+            <li><a class="dropdown-item" href="/dsp/emp">Personal Details</a></li>
+            <li><a class="dropdown-item" href="/dsp/pr_rgl">Payroll (Regular Employee)</a></li>
+            <li><a class="dropdown-item" href="/dsp/pr_csl">Payroll (Casual Employee)</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_marchent as permision %}
+      {% if permision%}
+        <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Client
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink2">
+            <li><a class="dropdown-item" href="/dsp/client">Client Details</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_accountant request.user.user_info.is_marchent as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Sales and Invoice
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink3">
+            {% firstof request.user.user_info.is_admin request.user.user_info.is_marchent as subpermision %}
+            {% if subpermision%}
+            <li><a class="dropdown-item" href="/dsp/sales">Invoicing</a></li>
+            {% endif %}
+            <li><a class="dropdown-item" href="/dsp/invoices">All Invoices</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+      {% firstof request.user.user_info.is_admin request.user.user_info.is_accountant as permision %}
+      {% if permision%}
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Book keeping 
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink3">
+            <li><a class="dropdown-item" href="/dsp/trns">Register Transaction</a></li>
+            <li><a class="dropdown-item" href="/dsp/cash_book">Cash Book</a></li>
+            <li><a class="dropdown-item" href="/dsp/bank_book">Bank Book</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+<!--Breadcumb-->
+<div>
+				<nav aria-label="breadcrumb">
+				  <ol class="breadcrumb">
+				    <li class="breadcrumb-item"><a href="/">Home</a></li>
+				    
+				    <li class="breadcrumb-item active" aria-current="page">Clients</li>
+				  </ol>
+				</nav>
+				
+				<div class="col-sm-8 mx-auto">
+					<div class="input-group mb-3">
+  				<input type="text" class="form-control" id="myInput" placeholder="Search..." aria-label="Recipient's username" aria-describedby="button-addon2">
+  				<button class="btn btn-outline-secondary" type="button" id="button-addon2">X</button>
+				</div>
+					
+				</div>
+</div>
+	<div class="container">
+		<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+  <button class="btn btn-primary me-md-2 btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-plus-circle"></i></button>
+</div>
+  
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Client Saving Form</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="/save/client/" method="post" class="g-3">
+      <div class="row modal-body">
+				 
+				 	{% csrf_token %}
+				 	{% for field in form %}
+				  <div class="col-md-4">
+				  	<label for="input{{field.label}}" class="form-label"> {{field.label}} </label>
+						{% if field.label == "Lead" %}
+				    <select name="emp_l" class="form-control">
+				    	{% for emp in emp_list %}
+				    	<option value="{{emp.id}}">{{emp.name}}</option>
+				    	{% endfor %}
+				    </select>
+				    {% else %}
+				    {{field}}
+				    {% endif %}
+				  </div>
+				  {% endfor %}
+				
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="Submit" class="btn btn-primary">Save</button>
+        
+      </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+</div>
+  <div class="table-responsive">
+		<table id="myTable" class="container table table-hover table-sm text-center">
+			<tr>
+				<th>Name</th>
+				<th>Leads</th>
+				<th>Email</th>
+				<th>Contact</th>
+				<th>Address</th>
+				<th>Website</th>
+				<th>Manage</th>
+			</tr>
+			{% for data in dataset1 %}
+			<tr >
+				<td>{{data.instance.name}}</td>
+				<td>{{data.emp.name}}</td>
+				<td><a href="mailto:{{data.instance.email}}" target="_blank">{{data.instance.email}}</a></td>
+				<td>{{data.instance.contact_1}}</td>
+				<td>{{data.instance.address}}</td>
+				<td><a href="{{data.instance.website}}"></a>{{data.instance.website}}</td>
+				<td><button class="btn btn-primary me-md-2 btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal{{data.instance.id}}"><i class="fas fa-user-edit"></i></button>
+				 	<!-- Modal -->
+          <div class="modal fade text-start" id="exampleModal{{data.instance.id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{data.instance.id}}" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel{{data.instance.id}}">Update Client Details</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/update/client/{{data.instance.id}}/" method="post" class="row g-3">
+                <div class="modal-body row">
+                  {% csrf_token %}
+          			 	{% for field in data.form %}
+          			  <div class="col-md-4">
+          			  	<label for="input{{field.label}}" class="form-label">{{field.label}}</label>
+          			    
+          			    {% if field.label == "Lead" %}
+          			    
+          			    <select value="" name="emp_l" class="form-control" required>
+          			    	{% for emp in emp_list %}
+          			    	<option value="{{emp.id}}" {% if data.emp.id == emp.id %}selected{%endif%}>{{emp.name}}</option>
+          			    	{% endfor %}
+          			    </select>
+          			    {% else %}
+          			    {{field}}
+          			    {% endif %}
+
+          			  </div>
+          			  {% endfor %}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-secondary me-md-2 btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#ModalDelete{{data.instance.id}}"><i class="far fa-trash-alt"></i></button>
+          <!-- Modal -->
+          <div class="modal fade" id="ModalDelete{{data.instance.id}}" tabindex="-1" aria-labelledby="ModalDelete{{data.instance.id}}" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="ModalDelete{{data.instance.id}}">Are You Sure?</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+          				 <p>All info and invoices of <mark>{{data.instance.name}} </mark> will be permanently deleted.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <a href="/delete/client/{{data.instance.id}}" class="btn btn-primary">Delete</a>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+				 </td>
+			</tr>
+		{%endfor%}
+		</table>
+  </div>
+</body>
+	<script src="{% static 'js/jquery-3.5.1.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript">
+	 $(document).ready(function(){
+  	$("#myInput").on("keyup",function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+
+    $("#myTable tr").first().css('display','none')
+  });
+  	$("#button-addon2").click(function(){
+  	$('#myInput').val("")
+  	var value =""
+  	$("#myTable tr").filter(function() {
+    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+    $("#myTable tr").first().css('display','none')
+  	});
+  	
+});
+
+</script>
+</html>
